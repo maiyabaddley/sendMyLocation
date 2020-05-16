@@ -6,7 +6,7 @@ var twilio = require('twilio')
 // Find your account sid and auth token in your Twilio account Console.
 var client = new twilio(
   'AC62e77facd97a3433832aa535ce2ab9ce',
-  '59863c956b2674721a8c2ff9719ababc',
+  'ace8d74a6c6f3931957539c45a81e51b',
 )
 
 // Send the text message.
@@ -24,7 +24,7 @@ router.get('/sendlocation', function (req, res, next) {
   })
 
   res.send({
-    status: 'WOW',
+    status: 'Sent',
   })
 })
 
