@@ -1,0 +1,29 @@
+{
+  "collapsed": true,
+  "tab": "1",
+  "sort": {
+    "type": "count",
+    "dir": -1
+  },
+  "filterByFavorite": false,
+  "favorites": [
+    "2",
+    "3",
+    "4",
+    "f915ce21-4052-4694-947a-cd137e5d2a36",
+    "53f56d85-dfcb-404d-a0ca-9e552765382d",
+    "0dbed5d8-a937-4065-8833-d421fb6549d9",
+    "c913f3a6-03e1-4e9d-bc45-0e2efeab212c",
+    "e054b19d-0699-40c1-9619-a7c2511049da"
+  ],
+  "collapsedPanels": {
+    "groups": false
+  },
+  "groupBy": "branchNumber",
+  "selectedGroups": [
+    "210"
+  ],
+  "showOnlySelectedJobs": false,
+  "showDropoffLocations": false,
+  "anchorRadius": 100
+}
