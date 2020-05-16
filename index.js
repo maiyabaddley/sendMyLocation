@@ -16,12 +16,12 @@ var pool = mysql.createPool({
   user: 'testnetwork',
   password: 'test',
   database: 'testnetwork',
-  port: 3307
+  port: 3307,
 })
 
 const baseIterator = (a) => {
   const ret = {}
-  Object.keys(a).forEach(b => {
+  Object.keys(a).forEach((b) => {
     _.set(ret, b.replace(/_/g, '.'), a[b])
   })
   return ret
@@ -46,22 +46,28 @@ const query = (qry, iterator = baseIterator) => {
 var corsOptions = {
   origin: true,
   methods: ['GET'],
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
 const testConnection = ({ host, username, password, port = 21, path }) => {
   return new Promise((resolve, reject) => {
-    var c = new Client();
+    var c = new Client()
 
     if (path) {
       c.on('ready', function () {
         c.listSafe(path, false, function (err, list) {
           console.log('path', path, err, list)
           if (err) {
-            resolve({ error: 'Successfully connected to FTP Server but could not find path' })
+            resolve({
+              error:
+                'Successfully connected to FTP Server but could not find path',
+            })
             return
           }
-          resolve({ message: 'Successfully connected to FTP Server and found path', dir: list })
+          resolve({
+            message: 'Successfully connected to FTP Server and found path',
+            dir: list,
+          })
           return
         })
       })
@@ -72,7 +78,10 @@ const testConnection = ({ host, username, password, port = 21, path }) => {
     }
 
     c.on('error', function (error) {
-      resolve({ error: 'Not able to connect to the FTP Server, please check you connection information and retry' })
+      resolve({
+        error:
+          'Not able to connect to the FTP Server, please check you connection information and retry',
+      })
     })
 
     // connect to localhost:21 as anonymous
@@ -80,8 +89,8 @@ const testConnection = ({ host, username, password, port = 21, path }) => {
       host: host,
       user: username,
       password: password,
-      port
-    });
+      port,
+    })
   })
 }
 app.use(cors())
@@ -103,9 +112,16 @@ app.post('/api/tms_web_components/ftp_export', (req, res, next) => {
       config.ftpConnectionInfo.lastSuccessfulConnection = null
     }
 
-    fs.writeFileSync('./config.json', JSON.stringify(config, null, '  '), 'utf8')
+    fs.writeFileSync(
+      './config.json',
+      JSON.stringify(config, null, '  '),
+      'utf8',
+    )
     config = fs.readFileSync('./config.json')
-    res.send({ config: JSON.parse(config), connection: { message, error, dir } })
+    res.send({
+      config: JSON.parse(config),
+      connection: { message, error, dir },
+    })
   })
 })
 
@@ -120,187 +136,209 @@ app.post('/api/tms_web_components/ftp_export/test_ftp', (req, res, next) => {
       config.ftpConnectionInfo.lastSuccessfulConnection = null
     }
 
-    fs.writeFileSync('./config.json', JSON.stringify(config, null, '  '), 'utf8')
+    fs.writeFileSync(
+      './config.json',
+      JSON.stringify(config, null, '  '),
+      'utf8',
+    )
     res.send({ config: config, connection: { message, error, dir } })
   })
 })
 
-app.get('/api/tms_web_components/field_value_options/:formName/:fieldName', (req, res, next) => {
-  const { formName, fieldName } = req.params
-  const values = {
-    salvage: {
-      dispatching_status: [{
-        value: 'completed',
-        label: 'Completed'
-      }, {
-        value: 'dispatching',
-        label: 'Dispatching'
-      }, {
-        value: 'picking_up',
-        label: 'Picking Up'
-      }]
-    },
-    standard: {
-      dispatching_status: [{
-        value: 'completed',
-        label: 'Completed'
-      }, {
-        value: 'dispatching',
-        label: 'Dispatching'
-      }, {
-        value: 'picking_up',
-        label: 'Picking Up'
-      }]
+app.get(
+  '/api/tms_web_components/field_value_options/:formName/:fieldName',
+  (req, res, next) => {
+    const { formName, fieldName } = req.params
+    const values = {
+      salvage: {
+        dispatching_status: [
+          {
+            value: 'completed',
+            label: 'Completed',
+          },
+          {
+            value: 'dispatching',
+            label: 'Dispatching',
+          },
+          {
+            value: 'picking_up',
+            label: 'Picking Up',
+          },
+        ],
+      },
+      standard: {
+        dispatching_status: [
+          {
+            value: 'completed',
+            label: 'Completed',
+          },
+          {
+            value: 'dispatching',
+            label: 'Dispatching',
+          },
+          {
+            value: 'picking_up',
+            label: 'Picking Up',
+          },
+        ],
+      },
     }
-  }
-  setTimeout(() => res.send(_.get(values, `${formName}.${fieldName}`, [])), 1000)
-})
+    setTimeout(
+      () => res.send(_.get(values, `${formName}.${fieldName}`, [])),
+      1000,
+    )
+  },
+)
 
 app.get('/api/tms_web_components/ftp_export/history', (req, res, next) => {
   const { formName, fieldName } = req.params
   const values = [
     {
-      "timestamp": moment().utc(),
-      "initiator": "Bob McGilicutty",
-      "rowCount": 142,
-      "successful": true,
-      "errorMessage": null,
+      timestamp: moment().utc(),
+      initiator: 'Bob McGilicutty',
+      rowCount: 142,
+      successful: true,
+      errorMessage: null,
     },
     {
-      "timestamp": moment('2020/01/22').utc(),
-      "initiator": "Bob McGilicutty",
-      "rowCount": 190,
-      "successful": true,
-      "errorMessage": null,
+      timestamp: moment('2020/01/22').utc(),
+      initiator: 'Bob McGilicutty',
+      rowCount: 190,
+      successful: true,
+      errorMessage: null,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 345,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 345,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 345,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 345,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 345,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 345,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 345,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 345,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 345,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 345,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 112,
-      "successful": true,
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 112,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 456,
-      "successful": true,
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 456,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 212,
-      "successful": true,
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 212,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 125,
-      "successful": true,
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 125,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 125,
-      "successful": true
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 125,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 125,
-      "successful": true
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 125,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 125,
-      "successful": true
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 125,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 125,
-      "successful": true
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 125,
+      successful: true,
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 123,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 123,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 368,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 368,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 322,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 322,
+      successful: false,
+      errorMessage: 'Could not find folder path',
     },
     {
-      "timestamp": moment('2020/01/23').utc(),
-      "initiator": "Billy Bob",
-      "rowCount": 322,
-      "successful": false,
-      "errorMessage": 'Could not find folder path',
-    }
+      timestamp: moment('2020/01/23').utc(),
+      initiator: 'Billy Bob',
+      rowCount: 322,
+      successful: false,
+      errorMessage: 'Could not find folder path',
+    },
   ]
   setTimeout(() => res.send(values), 2000)
 })
 
 app.get('/api/tms_web_components/ftp_export/preview', (req, res, next) => {
   res.set({
-    "Content-Disposition": "attachment; filename=previewExport.txt"
-  });
+    'Content-Disposition': 'attachment; filename=previewExport.txt',
+  })
   setTimeout(() => res.send('preview text'), 3000)
 })
 
 app.get('/api/tms_web_components/ftp_export/send', (req, res, next) => {
-  setTimeout(() => res.send({
-    "successful": true,
-    "rowsExported": 142,
-    "errorMessage": null,
-  }), 1000)
+  setTimeout(
+    () =>
+      res.send({
+        successful: true,
+        rowsExported: 142,
+        errorMessage: null,
+      }),
+    1000,
+  )
 })
 
 app.get('/api/dashboard/config', (req, res, next) => {
@@ -318,10 +356,13 @@ app.post('/api/dashboard/config', (req, res, next) => {
 
 app.get('/api/dashboard/groups/:groupBy', async (req, res, next) => {
   const { groupBy = 'branchNumber' } = req.params
-  const results = await query(`SELECT COUNT(salvage.id) as count, ${groupBy} as value, partner.name as title FROM salvage JOIN partner ON partner.externalId = ${groupBy} GROUP BY ${groupBy}`, (a, i) => ({
-    ...a,
-    id: a.value
-  }))
+  const results = await query(
+    `SELECT COUNT(salvage.id) as count, ${groupBy} as value, partner.name as title FROM salvage JOIN partner ON partner.externalId = ${groupBy} GROUP BY ${groupBy}`,
+    (a, i) => ({
+      ...a,
+      id: a.value,
+    }),
+  )
   res.send(results)
 })
 
@@ -354,14 +395,16 @@ LEFT JOIN taxonomy_term_data tow_type_tax ON tow_type_tax.tid = tow_type.tow_typ
 LEFT JOIN taxonomy_term_data color_tax ON color_tax.tid = color.vehicle_color_tid
 LEFT JOIN mobile_location_recent loc ON loc.vehicle_nid = node.nid
 WHERE type = 'company_vehicle';`)
-  res.send(results.map(r => {
-    const d = {}
-    Object.keys(r).forEach(key => {
-      const value = r[key]
-      _.set(d, key.replace(/_/g, '.'), value)
-    })
-    return d
-  }))
+  res.send(
+    results.map((r) => {
+      const d = {}
+      Object.keys(r).forEach((key) => {
+        const value = r[key]
+        _.set(d, key.replace(/_/g, '.'), value)
+      })
+      return d
+    }),
+  )
 })
 
 app.get('/api/dashboard/drivers', async (req, res, next) => {
@@ -391,9 +434,13 @@ app.get('/api/dashboard/jobs', async (req, res, next) => {
   const [where, value] = filter.split(':')
   console.log(filter, where, value)
 
-  const list = value.split(',').map(v => `'${v}'`).join(',')
+  const list = value
+    .split(',')
+    .map((v) => `'${v}'`)
+    .join(',')
 
-  let whereClause = value && value !== 'null' ? `${where} IN (${list})` : `${where} IS NULL`
+  let whereClause =
+    value && value !== 'null' ? `${where} IN (${list})` : `${where} IS NULL`
 
   let qry = `SELECT * FROM salvage WHERE ${whereClause}`
 
@@ -409,19 +456,21 @@ app.get('/api/dashboard/getDistances', async (req, res, next) => {
   const locationsPath = encodeURIComponent(locations)
   const destIndexesQuery = encodeURIComponent(destIndexes)
   const url = `http://platform-osrm.omadi-prod.net/table/v1/driving/${anchor};${locations}?sources=0&destinations=${destIndexes}&annotations=distance`
-  fetch(url).then((response) => response.json()).then((json) => {
-    const loc = locations.split(';')
-    const ret = {}
-    json.distances[0].forEach((distance, i) => {
-      const lngLat = loc[i]
-      ret[lngLat] = (distance * 0.000621371).toFixed(2)
+  fetch(url)
+    .then((response) => response.json())
+    .then((json) => {
+      const loc = locations.split(';')
+      const ret = {}
+      json.distances[0].forEach((distance, i) => {
+        const lngLat = loc[i]
+        ret[lngLat] = (distance * 0.000621371).toFixed(2)
+      })
+      res.send(ret)
     })
-    res.send(ret)
-  })
 })
 
 // http://platform-osrm.omadi-prod.net
 
-app.listen(8090, (err, address) => {
-  console.log(`Listening: 8090`)
+app.listen(8080, (err, address) => {
+  console.log(`Listening: 8080`)
 })
